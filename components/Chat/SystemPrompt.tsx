@@ -9,11 +9,12 @@ import {
 
 import { useTranslation } from 'next-i18next';
 
-import { DEFAULT_SYSTEM_PROMPT } from '@/utils/app/const';
-import { ROBERT_SHEMIN_SYSTEM_PROMPT } from '@/utils/app/const';
+import { DEFAULT_SYSTEM_PROMPT, ROBERT_SHEMIN_SYSTEM_PROMPT } from '@/utils/app/const';
 
 import { Conversation } from '@/types/chat';
 import { Prompt } from '@/types/prompt';
+
+import { OpenAIModel, OpenAIModelID } from '@/types/openai';
 
 import { PromptList } from './PromptList';
 import { VariableModal } from './VariableModal';
@@ -168,10 +169,20 @@ export const SystemPrompt: FC<Props> = ({
   }, [value]);
 
   useEffect(() => {
+    if (conversation.model.name.indexOf('RobertSheminGPT') > -1 && (conversation.prompt.indexOf('Robert') == -1 || conversation.prompt.indexOf('Shemin') == -1)) {
+      setValue(ROBERT_SHEMIN_SYSTEM_PROMPT);
+      return
+    }
+
     if (conversation.prompt) {
       setValue(conversation.prompt);
     } else {
-      setValue(DEFAULT_SYSTEM_PROMPT);
+      // change this for new prompt and new system
+      if (conversation.model.id == OpenAIModelID.ROBERT_SHEMIN_GPT_7B || conversation.model.id == OpenAIModelID.ROBERT_SHEMIN_GPT_13B) {
+        setValue(ROBERT_SHEMIN_SYSTEM_PROMPT);
+      } else {
+        setValue(DEFAULT_SYSTEM_PROMPT);
+      }
     }
   }, [conversation]);
 

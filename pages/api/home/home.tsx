@@ -15,7 +15,7 @@ import {
   cleanConversationHistory,
   cleanSelectedConversation,
 } from '@/utils/app/clean';
-import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from '@/utils/app/const';
+import { DEFAULT_SYSTEM_PROMPT, ROBERT_SHEMIN_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from '@/utils/app/const';
 import {
   saveConversation,
   saveConversations,
@@ -180,7 +180,7 @@ const Home = ({
 
   const handleNewConversation = () => {
     const lastConversation = conversations[conversations.length - 1];
-
+    
     const newConversation: Conversation = {
       id: uuidv4(),
       name: t('New Conversation'),
@@ -191,7 +191,7 @@ const Home = ({
         maxLength: OpenAIModels[defaultModelId].maxLength,
         tokenLimit: OpenAIModels[defaultModelId].tokenLimit,
       },
-      prompt: DEFAULT_SYSTEM_PROMPT,
+      prompt: defaultModelId == OpenAIModelID.ROBERT_SHEMIN_GPT_13B ? ROBERT_SHEMIN_SYSTEM_PROMPT : DEFAULT_SYSTEM_PROMPT,
       temperature: lastConversation?.temperature ?? DEFAULT_TEMPERATURE,
       folderId: null,
     };
@@ -334,7 +334,7 @@ const Home = ({
           name: t('New Conversation'),
           messages: [],
           model: OpenAIModels[defaultModelId],
-          prompt: DEFAULT_SYSTEM_PROMPT,
+          prompt: defaultModelId == OpenAIModelID.ROBERT_SHEMIN_GPT_13B ? ROBERT_SHEMIN_SYSTEM_PROMPT : DEFAULT_SYSTEM_PROMPT,
           temperature: lastConversation?.temperature ?? DEFAULT_TEMPERATURE,
           folderId: null,
         },
@@ -360,7 +360,7 @@ const Home = ({
       }}
     >
       <Head>
-        <title>Chatbot UI</title>
+        <title>DemandGPT</title>
         <meta name="description" content="ChatGPT but better." />
         <meta
           name="viewport"
